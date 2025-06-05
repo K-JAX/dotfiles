@@ -1,6 +1,6 @@
 # .bashrc
 
-# added comment from fedora laptop
+# added comment from fedora laptop, 1
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
