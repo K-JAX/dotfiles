@@ -1,5 +1,7 @@
 # .bashrc
 
+# added comment from fedora laptop
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
