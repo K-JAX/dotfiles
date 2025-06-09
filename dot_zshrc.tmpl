@@ -73,16 +73,6 @@ ZSH_THEME="robbyrussell"
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# shortcuts for quickly interacting with zshrc
-
-# edit zshrc
-alias zshrc="vim ~/.zshrc"
-
-# reload zshrc
-alias src="source ~/.zshrc"
 
 # update external dotfiles including zshrc
 #alias updot='cd ~/.dotfiles/ && git pull && git commit -a -m "Self-automated: updating dot files." && git push && cd $OLDPWD'
@@ -132,10 +122,6 @@ export PATH=/var/lib/flatpak/app/org.blender.Blender/x86_64/stable/c8ca67e58dbb8
 alias pro='gsettings set org.gnome.desktop.interface gtk-theme "Simply_Circles_Blue_Dark_Envolved" && gsettings set org.gnome.desktop.interface icon-theme "Simply-Blue-Circles" && gsettings set org.gnome.desktop.interface cursor-theme "oreo_blue_cursors"'
 alias hax='gsettings set org.gnome.desktop.interface gtk-theme "hacking_parrot_OS + ico Sovietec-OS  9.0001.09" && gsettings set org.gnome.desktop.interface icon-theme "Simply-Cyan-Circles" && gsettings set org.gnome.desktop.interface cursor-theme "oxy-neon"'
 
-# Some quick brightness commands (only works on CortexOne setup for now
-alias br1='xrandr --output HDMI-1 --brightness' 
-alias br2='xrandr --output HDMI-2 --brightness'
-
 # switch to nvim sessions
 export SESSIONS=~/.config/nvim/sessions/
 alias cds="cd $SESSIONS"
@@ -173,42 +159,85 @@ alias cds="cd $SESSIONS"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Google Drive
-export GDRIVE="$HOME/Insync/kevingarubba@gmail.com/Google-Drive"
-alias cdgd='cd $GDRIVE'
+# Common shell restarting and editing
+## edit zshrc
+alias zshrc="vim ~/.zshrc"
+
+## reload zshrc and zprofile
+alias src="source ~/.zshrc && source ~/.zprofile"
+
+# if we are on my work macbook
+{{ if eq .chezmoi.os "darwin" }}
+  alias cpssh="cat ~/.ssh/.psecrets | tr -d '\n\r' | pbcopy"
+  alias cpmysql="cat ~/.ssh/.mysql-secret | tr -d '\n\r' | pbcopy"
+  alias cppat="cat ~/.myPAT | tr -d '\n\r' | pbcopy"
+{{ end }}
+
+## neovim-related
+alias neovim="nvim"
+# neovim session path
+export SESH=$HOME/.config/nvim/sessions
+alias cdsesh="cd $SESH"
+alias cds="cd $SESH"
+
+## web
+# function to get the host for a domain
+getHost() {
+	# clean out the http(s):// bit
+    local CLEAN_HOST=$(echo "$1" | sed -E 's~^https?://~~' | cut -d/ -f1)
+
+    # dig command to get the IP address, sometimes the output of this command includes the CNAME record so we'll use grep to filter and grab just the IP address
+    local IP_ADDRESS=$(dig +short "$CLEAN_HOST" A | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$')
+    if [ -z "$IP_ADDRESS" ]; then
+        echo "No IP address found for $CLEAN_HOST"
+        return 1
+    fi       
+
+    local HOST=$(dig +short -x "$IP_ADDRESS" | sed 's/\.$//')
+    echo "$HOST"
+}
+
+## fun
+weather(){
+  if [ -z "$1" ]; then
+    curl https://wttr.in
+  else
+    curl https://wttr.in/$1
+  fi
+}
+
+# Themes
+  # Oh My Posh
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/lambdageneration.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/clean-detailed.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/paradox.omp.json)"
+eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/powerline.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/takuya.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/tonybaloney.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/wholespace.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/uew.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/tokyo.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/star.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/multiverse-neon.omp.json)"
 
 # Projects
-alias cdproj='cd $GDRIVE/docs/proj'
+# alias cdproj='cd $GDRIVE/docs/proj'
 
 # Code Projects
-export CODEPROJECTS="$GDRIVE/docs/proj/code"
-alias cdcode='cd $CODEPROJECTS'
+# export CODEPROJECTS="$GDRIVE/docs/proj/code"
+# alias cdcode='cd $CODEPROJECTS'
 
 # c language playground
-alias cdc='cd $CODEPROJECTS/playground/c'
+# alias cdc='cd $CODEPROJECTS/playground/c'
 
 # python playground
-alias cdpy='cd $CODEPROJECTS/playground/python'
+# alias cdpy='cd $CODEPROJECTS/playground/python'
 
 # d3.js projects temporary shortcut
-alias cdd3='cd $CODEPROJECTS/playground/javascript/d3'
-
-# podman testing
-alias cdpod='cd $CODEPROJECTS/playground/docker/podman/test'
+# alias cdd3='cd $CODEPROJECTS/playground/javascript/d3'
 
 # local sites
 export SITES="$HOME/Local Sites"
 
-# Capezza Hill
-alias cdch='cd $SITES/capezzahill/app/public'
-
-# Success Kit
-alias cdsk='$SITES/successkit/app/public/wp-content/themes/'
-
-# ICM
-alias cdi='$SITES/icm'
-alias cdis='$GDRIVE/docs/biz/employer-client-work/icm/media/social/'
-
-# 5th Wheel Jobs
-alias cd5='$SITES/5th-wheel-jobs/app/public/wp-content/themes/fifthwheel'
-
+# Added by Windsurf
+export PATH="/Users/kevin.garubba/.codeium/windsurf/bin:$PATH"
