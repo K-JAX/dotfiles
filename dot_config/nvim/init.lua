@@ -139,6 +139,17 @@ require("lazy").setup({
 		"letieu/hacker.nvim",
 	},
 
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
+  },
+
+  {
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
+    dependencies = { {'nvim-tree/nvim-web-devicons'}}
+  },
+
 	-- Themes
 	{ "sainnhe/gruvbox-material" },
 	{ "navarasu/onedark.nvim" },
@@ -159,6 +170,66 @@ local function apply_theme(theme_name)
 end
 
 apply_theme("catppuccin") -- Apply the desired theme
+
+-- ========================================
+-- Dashboard Configuration
+-- ========================================
+require("dashboard").setup({
+  theme = "hyper",
+  config = {
+    week_header = {
+      enable = true, -- Enable the week header
+      date_format = "%A, %d %B %Y", -- Format for the date
+      center = true, -- Center the week header
+    },
+    center = {
+      {
+        icon = '',
+        icon_hl = 'group',
+        desc = 'description',
+        desc_hl = 'group',
+        key = 'shortcut key in dashboard buffer not keymap !!',
+        key_hl = 'group',
+        key_format = ' [%s]', -- `%s` will be substituted with value of `key`
+        action = '',
+      },
+    },
+    footer = {},
+    vertical_center = false, -- Center the Dashboard on the vertical (from top to bottom)
+    },
+})
+
+-- vim.api.nvim_set_hl(0, "DashboardHeader", { fg = "#dbc5f0" })
+vim.api.nvim_set_hl(0, "DashboardHeader", { fg = "#393240" })
+
+-- ========================================
+-- Lualine Configuration
+-- ========================================
+require("lualine").setup({
+  options = {
+    theme = "catppuccin",
+    component_separators = { left = "", right = "" },
+    section_separators = { left = "", right = "" },
+  },
+  sections = {
+    lualine_a = { "mode" },
+    lualine_b = { "branch", "diff" },
+    lualine_c = { "filename" },
+    lualine_x = { "encoding", "fileformat", "filetype" },
+    lualine_y = { "progress" },
+    lualine_z = { "location" },
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = { "filename" },
+    lualine_x = { "location" },
+    lualine_y = {},
+    lualine_z = {},
+  },
+  tabline = {},
+})
+
 
 -- ========================================
 -- Code Formatting Configuration
