@@ -79,11 +79,14 @@ ZSH_THEME="robbyrussell"
 alias chezpush='cd ~/.local/share/chezmoi && git add . && git commit -m "chezmoi update" && git push && cd -'
 
 # Welcome message
-figlet -f banner "Welcome $(whoami)"
-
-# oh my posh
-# eval "$(oh-my-posh --init --shell zsh)" 
-eval "$(oh-my-posh --init --shell zsh --config /home/kjax/.poshthemes/clean-detailed.omp.json)"
+# if figlet  is installed display a  welcome message
+if [ -x "$(command -v figlet)" ]; then
+  echo -e "\n\n"
+  figlet -f slant "Welcome $(whoami)"
+  echo -e "\n\n"
+else
+  echo -e "\n\nWelcome $(whoami)\n\n"
+fi
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
@@ -107,14 +110,13 @@ PATH=$PATH:$HOME/bin
 export NVM_DIR=~/.nvm
 source ~/.nvm/nvm.sh
 
+export PATH="$HOME/.npm-global/bin:$PATH"
+
 # yarn package manager bin
 export PATH="$(yarn global bin):$PATH"
 
 # composer package manager bin
 export PATH=~/.config/composer/vendor/bin:$PATH
-
-# blender 3d app program
-export PATH=/var/lib/flatpak/app/org.blender.Blender/x86_64/stable/c8ca67e58dbb88f64d3de28516f0e5a6b4dcfaa9729346702325a21929d68235/files/blender:$PATH
 
 # User configuration
 
