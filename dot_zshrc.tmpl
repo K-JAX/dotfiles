@@ -120,37 +120,19 @@ export PATH=~/.config/composer/vendor/bin:$PATH
 
 # User configuration
 
+# this alias theme setting is very cool in theory, but I don't use GNOME very often anymore, so consider another approach
 # setting theme based on mood / time of day
-alias pro='gsettings set org.gnome.desktop.interface gtk-theme "Simply_Circles_Blue_Dark_Envolved" && gsettings set org.gnome.desktop.interface icon-theme "Simply-Blue-Circles" && gsettings set org.gnome.desktop.interface cursor-theme "oreo_blue_cursors"'
-alias hax='gsettings set org.gnome.desktop.interface gtk-theme "hacking_parrot_OS + ico Sovietec-OS  9.0001.09" && gsettings set org.gnome.desktop.interface icon-theme "Simply-Cyan-Circles" && gsettings set org.gnome.desktop.interface cursor-theme "oxy-neon"'
-
-# switch to nvim sessions
-export SESSIONS=~/.config/nvim/sessions/
-alias cds="cd $SESSIONS"
+# alias pro='gsettings set org.gnome.desktop.interface gtk-theme "Simply_Circles_Blue_Dark_Envolved" && gsettings set org.gnome.desktop.interface icon-theme "Simply-Blue-Circles" && gsettings set org.gnome.desktop.interface cursor-theme "oreo_blue_cursors"'
+# alias hax='gsettings set org.gnome.desktop.interface gtk-theme "hacking_parrot_OS + ico Sovietec-OS  9.0001.09" && gsettings set org.gnome.desktop.interface icon-theme "Simply-Cyan-Circles" && gsettings set org.gnome.desktop.interface cursor-theme "oxy-neon"'
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# Backup Debian Server on Linode
-#alias sshkjax='ssh kjax@45.79.253.64'
-
-# Test server on Digital Ocean
-#alias sshtest='ssh root@134.209.208.154'
-
-#2nd test of ubuntu server on Digital Ocean
-#alias sshub='ssh kjax@206.189.238.18'
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -174,6 +156,15 @@ alias src="source ~/.zshrc && source ~/.zprofile"
   alias cpmysql="cat ~/.ssh/.mysql-secret | tr -d '\n\r' | pbcopy"
   alias cppat="cat ~/.myPAT | tr -d '\n\r' | pbcopy"
 {{ end }}
+
+# text editors
+
+# Preferred editor
+if [ -x "$(command -v nvim)" ]; then
+  export EDITOR='nvim'
+else
+  export EDITOR='vim'
+fi
 
 ## neovim-related
 alias neovim="nvim"
@@ -208,8 +199,7 @@ weather(){
   fi
 }
 
-# Themes
-  # Oh My Posh
+# Oh My Posh (some of my faves here. I only include a few in the shared chezmoi directory, so you may have to hunt for some of these).
 #eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/lambdageneration.omp.json)"
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/clean-detailed.omp.json)"
 #eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/paradox.omp.json)"
@@ -223,23 +213,22 @@ eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/clean-detailed.omp.jso
 #eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/multiverse-neon.omp.json)"
 
 # Projects
-# alias cdproj='cd $GDRIVE/docs/proj'
 
-# Code Projects
-# export CODEPROJECTS="$GDRIVE/docs/proj/code"
-# alias cdcode='cd $CODEPROJECTS'
+# general dev
+mkdir -p "$HOME/dev"
+export DEV="$HOME/dev"
+alias cddev='cd $DEV'
 
-# c language playground
-# alias cdc='cd $CODEPROJECTS/playground/c'
-
-# python playground
-# alias cdpy='cd $CODEPROJECTS/playground/python'
-
-# d3.js projects temporary shortcut
-# alias cdd3='cd $CODEPROJECTS/playground/javascript/d3'
+# code playground
+mkdir -p "$DEV/playground"
+export CODEPLAY="$DEV/playground"
+alias cdplay='cd $CODEPLAY'
 
 # local sites
+mkdir -p "$HOME/Local Sites"
 export SITES="$HOME/Local Sites"
+alias cdsites='cd "$SITES"'
+
 
 # Added by Windsurf
 export PATH="/Users/kevin.garubba/.codeium/windsurf/bin:$PATH"
