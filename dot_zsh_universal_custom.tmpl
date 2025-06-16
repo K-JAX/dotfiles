@@ -1,0 +1,142 @@
+# universal zsh customizations
+
+{{ if eq .chezmoi.os "darwin" }}
+  # darwin ( macOS )
+  export PATH="/opt/homebrew/bin:$PATH"
+alias ls='ls -G'
+{{ else if eq .chezmoi.os "linux" }}
+  # linux
+  export PATH="/usr/local/bin:$PATH"
+  alias ls='ls --color=auto'
+{{ else }}
+  # other operating system
+{{ end }}
+
+
+# update external dotfiles including zshrc
+#alias updot='cd ~/.dotfiles/ && git pull && git commit -a -m "Self-automated: updating dot files." && git push && cd $OLDPWD'
+alias chezpush='cd ~/.local/share/chezmoi && git add . && git commit -m "chezmoi update" && git push && cd -'
+
+# Welcome message
+# if figlet  is installed display a  welcome message
+if [ -x "$(command -v figlet)" ]; then
+  echo -e "\n\n"
+  figlet -f slant "Welcome $(whoami)"
+  echo -e "\n\n"
+else
+  echo -e "\n\nWelcome $(whoami)\n\n"
+fi
+
+
+# common shell editing and restarting
+alias zshrc="vim ~/.zshrc"
+
+## reload zshrc and zprofile
+alias src="source ~/.zshrc && source ~/.zprofile"
+
+# if we are on my work macbook, set some work-related aliases for credentials
+{{ if eq .chezmoi.os "darwin" }}
+  alias cpssh="cat ~/.ssh/.psecrets | tr -d '\n\r' | pbcopy"
+  alias cpmysql="cat ~/.ssh/.mysql-secret | tr -d '\n\r' | pbcopy"
+  alias cppat="cat ~/.myPAT | tr -d '\n\r' | pbcopy"
+{{ end }}
+
+# Preferred editor
+if [ -x "$(command -v nvim)" ]; then
+  export EDITOR='nvim'
+else
+  export EDITOR='vim'
+fi
+
+# git
+plugins=(git)
+
+# node related paths
+source $ZSH/oh-my-zsh.sh
+
+# Turns off "!" becoming previous statement in bash.. super annoying for me sometimes
+unsetopt BANG_HIST 
+
+# Set SELinux setenforce to 0.. This is a major headache in mounting container volumes.
+#setenforce 0
+
+# User homespace bin
+PATH=$PATH:$HOME/bin
+ 
+# node, nvm, npm
+export NVM_DIR=~/.nvm
+source ~/.nvm/nvm.sh
+
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+# yarn package manager bin
+export PATH="$(yarn global bin):$PATH"
+
+# composer package manager bin
+export PATH=~/.config/composer/vendor/bin:$PATH
+
+## neovim-related
+alias neovim="nvim"
+# neovim session path
+export SESH=$HOME/.config/nvim/sessions
+alias cdsesh="cd $SESH"
+alias cds="cd $SESH"
+
+
+## web
+# function to get the host for a domain
+getHost() {
+	# clean out the http(s):// bit
+    local CLEAN_HOST=$(echo "$1" | sed -E 's~^https?://~~' | cut -d/ -f1)
+
+    # dig command to get the IP address, sometimes the output of this command includes the CNAME record so we'll use grep to filter and grab just the IP address
+    local IP_ADDRESS=$(dig +short "$CLEAN_HOST" A | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$')
+    if [ -z "$IP_ADDRESS" ]; then
+        echo "No IP address found for $CLEAN_HOST"
+        return 1
+    fi       
+
+    local HOST=$(dig +short -x "$IP_ADDRESS" | sed 's/\.$//')
+    echo "$HOST"
+}
+
+## fun
+weather(){
+  if [ -z "$1" ]; then
+    curl https://wttr.in
+  else
+    curl https://wttr.in/$1
+  fi
+}
+
+# Oh My Posh (some of my faves here. I only include a few in the shared chezmoi directory, so you may have to hunt for some of these).
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/lambdageneration.omp.json)"
+eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/clean-detailed.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/paradox.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/powerline.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/takuya.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/tonybaloney.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/wholespace.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/uew.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/tokyo.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/star.omp.json)"
+#eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/multiverse-neon.omp.json)"
+
+
+# Projects
+
+# general dev
+mkdir -p "$HOME/dev"
+export DEV="$HOME/dev"
+alias cddev='cd $DEV'
+
+# code playground
+mkdir -p "$DEV/playground"
+export CODEPLAY="$DEV/playground"
+alias cdplay='cd $CODEPLAY'
+
+# local sites
+mkdir -p "$HOME/Local Sites"
+export SITES="$HOME/Local Sites"
+alias cdsites='cd "$SITES"'
+
