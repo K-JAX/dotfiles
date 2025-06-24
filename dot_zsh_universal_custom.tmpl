@@ -76,7 +76,9 @@ export PATH=~/.config/composer/vendor/bin:$PATH
 
 # python, pip
 {{ if eq .chezmoi.os "darwin" }}
+  # for some reason mac is lagging in making python3 the official python version so we'll just alias it
   alias python=python3
+  alias pip=pip3
 {{ end }}
 
 # update external dotfiles including zshrc
