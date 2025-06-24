@@ -3,7 +3,6 @@
 {{ if eq .chezmoi.os "darwin" }}
   # darwin ( macOS )
   export PATH="/opt/homebrew/bin:$PATH"
-alias ls='ls -G'
 {{ else if eq .chezmoi.os "linux" }}
   # linux
   export PATH="/usr/local/bin:$PATH"
@@ -51,7 +50,6 @@ fi
 # git
 plugins=(git)
 
-# node related paths
 source $ZSH/oh-my-zsh.sh
 
 # Turns off "!" becoming previous statement in bash.. super annoying for me sometimes
@@ -66,14 +64,84 @@ PATH=$PATH:$HOME/bin
 # node, nvm, npm
 export NVM_DIR=~/.nvm
 source ~/.nvm/nvm.sh
-
 export PATH="$HOME/.npm-global/bin:$PATH"
 
 # yarn package manager bin
-export PATH="$(yarn global bin):$PATH"
+if [ -x "$(command -v yarn)" ]; then
+  export PATH="$(yarn global bin):$PATH"
+fi
 
-# composer package manager bin
+# php, composer
 export PATH=~/.config/composer/vendor/bin:$PATH
+
+# python, pip
+{{ if eq .chezmoi.os "darwin" }}
+  alias python=python3
+{{ end }}
+
+# update external dotfiles including zshrc
+#alias updot='cd ~/.dotfiles/ && git pull && git commit -a -m "Self-automated: updating dot files." && git push && cd $OLDPWD'
+alias chezpush='cd ~/.local/share/chezmoi && git add . && git commit -m "chezmoi update" && git push && cd -'
+
+# Welcome message
+# if figlet  is installed display a  welcome message
+if [ -x "$(command -v figlet)" ]; then
+  echo -e "\n\n"
+  figlet -f slant "Welcome $(whoami)"
+  echo -e "\n\n"
+else
+  echo -e "\n\nWelcome $(whoami)\n\n"
+fi
+
+
+# common shell editing and restarting
+alias zshrc="vim ~/.zshrc"
+
+## reload zshrc and zprofile
+alias src="source ~/.zshrc && source ~/.zprofile"
+
+# if we are on my work macbook, set some work-related aliases for credentials
+{{ if eq .chezmoi.os "darwin" }}
+  alias cpssh="cat ~/.ssh/.psecrets | tr -d '\n\r' | pbcopy"
+  alias cpmysql="cat ~/.ssh/.mysql-secret | tr -d '\n\r' | pbcopy"
+  alias cppat="cat ~/.myPAT | tr -d '\n\r' | pbcopy"
+{{ end }}
+
+# Preferred editor
+if [ -x "$(command -v nvim)" ]; then
+  export EDITOR='nvim'
+else
+  export EDITOR='vim'
+fi
+
+# git
+plugins=(git)
+
+source $ZSH/oh-my-zsh.sh
+
+# Turns off "!" becoming previous statement in bash.. super annoying for me sometimes
+unsetopt BANG_HIST 
+
+# Set SELinux setenforce to 0.. This is a major headache in mounting container volumes.
+#setenforce 0
+
+# User homespace bin
+PATH=$PATH:$HOME/bin
+ 
+# node, nvm, npm
+export NVM_DIR=~/.nvm
+source ~/.nvm/nvm.sh
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+# yarn package manager bin
+if [ -x "$(command -v yarn)" ]; then
+  export PATH="$(yarn global bin):$PATH"
+fi
+
+# php, composer
+export PATH=~/.config/composer/vendor/bin:$PATH
+
+# 
 
 ## neovim-related
 alias neovim="nvim"
