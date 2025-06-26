@@ -152,6 +152,13 @@ export SESH=$HOME/.config/nvim/sessions
 alias cdsesh="cd $SESH"
 alias cds="cd $SESH"
 
+# ssh
+{{ if eq .chezmoi.os "darwin" }}
+  eval $(ssh-agent -s) > /dev/null 2>&1
+  # ONLY on mac do I get this issue with having to re-add  github ssh keys but ok foine
+  # ssh-add --apple-use-keychain ~/.ssh/keys/id_ed25519_github_personal 
+  # ssh-add --apple-use-keychain ~/.ssh/keys/id_ed25519_github_posture
+{{ end }}
 
 ## web
 # function to get the host for a domain
