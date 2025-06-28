@@ -21,7 +21,7 @@ alias chezpush='cd ~/.local/share/chezmoi && git add . && git commit -m "chezmoi
 # if figlet  is installed display a  welcome message
 if [ -x "$(command -v figlet)" ]; then
   echo -e "\n\n"
-  figlet -f slant "Welcome $(whoami)"
+  figlet -f lean "Welcome $(whoami)"
   echo -e "\n\n"
 else
   echo -e "\n\nWelcome $(whoami)\n\n"
@@ -55,7 +55,7 @@ fi
 # git
 plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+[ -f $ZSH/oh-my-zsh.sh ] && source $ZSH/oh-my-zsh.sh
 
 # Turns off "!" becoming previous statement in bash.. super annoying for me sometimes
 unsetopt BANG_HIST 
@@ -100,35 +100,6 @@ if [ -x "$(command -v nvim)" ]; then
 else
   export EDITOR='vim'
 fi
-
-# git
-plugins=(git)
-
-source $ZSH/oh-my-zsh.sh
-
-# Turns off "!" becoming previous statement in bash.. super annoying for me sometimes
-unsetopt BANG_HIST 
-
-# Set SELinux setenforce to 0.. This is a major headache in mounting container volumes.
-#setenforce 0
-
-# User homespace bin
-PATH=$PATH:$HOME/bin
- 
-# node, nvm, npm
-export NVM_DIR=~/.nvm
-source ~/.nvm/nvm.sh
-export PATH="$HOME/.npm-global/bin:$PATH"
-
-# yarn package manager bin
-if [ -x "$(command -v yarn)" ]; then
-  export PATH="$(yarn global bin):$PATH"
-fi
-
-# php, composer
-export PATH=~/.config/composer/vendor/bin:$PATH
-
-# 
 
 ## neovim-related
 alias neovim="nvim"
