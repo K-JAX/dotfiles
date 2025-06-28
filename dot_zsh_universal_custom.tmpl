@@ -34,6 +34,10 @@ alias zshrc="vim ~/.zshrc"
 ## reload zshrc and zprofile
 alias src="source ~/.zshrc"
 
+# update external dotfiles including zshrc
+#alias updot='cd ~/.dotfiles/ && git pull && git commit -a -m "Self-automated: updating dot files." && git push && cd $OLDPWD'
+alias chezpush='cd ~/.local/share/chezmoi && git add . && git commit -m "chezmoi update" && git push && cd -'
+
 # if we are on my work macbook, set some work-related aliases for credentials
 {{ if eq .chezmoi.os "darwin" }}
   alias cpssh="cat ~/.ssh/.psecrets | tr -d '\n\r' | pbcopy"
@@ -82,26 +86,6 @@ export PATH=~/.config/composer/vendor/bin:$PATH
   alias pip=pip3
 {{ end }}
 
-# update external dotfiles including zshrc
-#alias updot='cd ~/.dotfiles/ && git pull && git commit -a -m "Self-automated: updating dot files." && git push && cd $OLDPWD'
-alias chezpush='cd ~/.local/share/chezmoi && git add . && git commit -m "chezmoi update" && git push && cd -'
-
-# Welcome message
-# if figlet  is installed display a  welcome message
-if [ -x "$(command -v figlet)" ]; then
-  echo -e "\n\n"
-  figlet -f slant "Welcome $(whoami)"
-  echo -e "\n\n"
-else
-  echo -e "\n\nWelcome $(whoami)\n\n"
-fi
-
-
-# common shell editing and restarting
-alias zshrc="vim ~/.zshrc"
-
-## reload zshrc and zprofile
-alias src="source ~/.zshrc && source ~/.zprofile"
 
 # if we are on my work macbook, set some work-related aliases for credentials
 {{ if eq .chezmoi.os "darwin" }}
