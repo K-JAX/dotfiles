@@ -11,6 +11,7 @@
   # other operating system
 {{ end }}
 
+[ -f ~/.zprofile ] && source ~/.zprofile
 
 # update external dotfiles including zshrc
 #alias updot='cd ~/.dotfiles/ && git pull && git commit -a -m "Self-automated: updating dot files." && git push && cd $OLDPWD'
@@ -31,7 +32,7 @@ fi
 alias zshrc="vim ~/.zshrc"
 
 ## reload zshrc and zprofile
-alias src="source ~/.zshrc && source ~/.zprofile"
+alias src="source ~/.zshrc"
 
 # if we are on my work macbook, set some work-related aliases for credentials
 {{ if eq .chezmoi.os "darwin" }}
